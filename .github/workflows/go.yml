@@ -3,8 +3,8 @@ name: Go
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - 'v*'
 
 jobs:
 
@@ -29,8 +29,17 @@ jobs:
             dep ensure
         fi
 
+    - name: gofmt
+      run: make fmt
+      
     - name: Build
-      run: go build -v .
+      run: make build
 
     - name: Test
-      run: go test -v .
+      run: make test
+
+    - name: Dist
+      run: make dist
+
+    - name: hash generation
+      run: ./ci/hashgen.sh
